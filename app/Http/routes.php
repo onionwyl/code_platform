@@ -28,6 +28,10 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "UserController@showUserDashboard"
     ]);
 
+    Route::match(['GET', 'POST'], '/dashboard/profile', [
+        "uses" => "UserController@setUserProfile"
+    ]);
+
     Route::get('/logout',[
         "uses" => "UserController@logoutAction"
     ]);

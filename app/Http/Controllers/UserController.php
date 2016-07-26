@@ -24,7 +24,7 @@ class UserController extends Controller
             $this->validate($request, [
                 'username' => 'required|unique:users',
                 'password' => 'required',
-                'email' => 'required|unique:users'
+                'email' => 'required|email|unique:users'
             ]);
             $userObject = new User;
             $userObject->username = $input['username'];
@@ -93,15 +93,56 @@ class UserController extends Controller
         return View::make("auth.signin")->withErrors($errMsg);
     }
 
-    public function showUserDashboard(Request $request)
+    public function setUserProfile(Request $request)
     {
         $data = [];
+        $errMsg = new MessageBag;
         $uid = $request->session()->get('uid');
         $userObj = User::where('uid', $uid)->first();
+        $userInfoObj = UserInfo::where('uid', $uid)->first();
         $data['user'] = $userObj;
-        return View::make('user.dashboard')->with($data);
+        $data['userinfo'] = $userInfoObj;
+        if($request->method() == "POST")
+        {
+            $input = $request->input();
+            $userInfoObj->nickname = $input['nickname'];
+            if(isset($input['realname']))
+                $userInfoObj->realname = $input['realname'];
+            if(isset($input['signature']))
+                $userInfoObj->signature = $input['signature'];
+            if(isset($input['introduction']))
+                $userInfoObj->introduction = $input['introduction'];
+            $data['userinfo'] = $userInfoObj;
+            $userInfoObj->save();
+            if($request->hasFile('image'))
+            {
+                $image = $request->file('image');
+                if($image->getClientSize() > 2097152)
+                {
+                    $errMsg->add('sizeErr', 'Image file is larger than 2M!');
+                }
+                elseif(substr($image->getMimeType(), 0, 6) != "image/")
+                {
+                    $errMsg->add('typeErr', 'Image file type error!');
+                }
+                else
+                {
+                    $image->move('./avator/', "$uid.jpg");
+                }
+            }
+        }
+        return View::make('user.dashboard')->with($data)->withErrors($errMsg);
+    }
+
+    public function showUserDashboard(Request $request)
+    {
+        return Redirect::to('/dashboard/profile');
+    }
+
+    public function logoutAction(Request $request)
+    {
+        $request->session()->flush();
+        return Redirect::to('/');
     }
 
 }
-
-

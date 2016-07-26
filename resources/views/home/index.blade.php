@@ -11,6 +11,7 @@
         <a href="/signup">signup</a>
     @else
         <a href="/dashboard">{{ Request::session()->get('username') }}</a>
+        <a href="/logout">logout</a>
     @endif
 </body>
 </html>

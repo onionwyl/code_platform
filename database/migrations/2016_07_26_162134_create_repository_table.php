@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCodeTable extends Migration
+class CreateRepositoryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateCodeTable extends Migration
      */
     public function up()
     {
-         Schema::create('code', function (Blueprint $table) {
-            $table->increments('cid');
+         Schema::create('repository', function (Blueprint $table) {
+            $table->increments('repoid');
             $table->integer('uid');
-            $table->integer('rid');
-            $table->string('file_name')->unique();
-            $table->longText('content');
-            $table->integer('shareable');
+            $table->integer('catid');
+            $table->string('repo_name');
+            $table->string('repo_description');
             $table->timestamps();
          });
     }
@@ -30,6 +29,6 @@ class CreateCodeTable extends Migration
      */
     public function down()
     {
-         Schema::drop('code');
+        Schema::drop('repository');
     }
 }

@@ -74,6 +74,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     ]);
 
+    Route::match(['GET', 'POST'], '/dashboard/repository/{repo_name}/edit', [
+
+    ]);
+
     Route::get('/logout',[
         "uses" => "UserController@logoutAction"
     ]);

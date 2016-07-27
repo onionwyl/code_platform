@@ -12,6 +12,8 @@
     @else
         <a href="/dashboard">{{ Request::session()->get('username') }}</a>
         <a href="/logout">logout</a>
+        <h2>Repositories</h2>
+        <h2>Categories</h2>
     @endif
 </body>
 </html>

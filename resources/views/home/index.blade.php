@@ -12,7 +12,9 @@
     @else
         <a href="/dashboard">{{ Request::session()->get('username') }}</a>
         <a href="/logout">logout</a>
-        <h2>Repositories</h2>
+        <h2>Repository</h2>
+        <a href="/new">Add Repository</a>
+        <a href="/{{ Request::session()->get('username') }}">User index</a>
         <h2>Categories</h2>
     @endif
 </body>

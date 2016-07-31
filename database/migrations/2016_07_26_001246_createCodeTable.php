@@ -16,9 +16,8 @@ class CreateCodeTable extends Migration
             $table->increments('cid');
             $table->integer('uid');
             $table->integer('rid');
-            $table->string('file_name')->unique();
+            $table->string('file_name');
             $table->longText('content');
-            $table->integer('shareable');
             $table->timestamps();
          });
     }

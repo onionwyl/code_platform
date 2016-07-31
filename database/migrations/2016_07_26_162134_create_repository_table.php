@@ -13,7 +13,7 @@ class CreateRepositoryTable extends Migration
     public function up()
     {
          Schema::create('repository', function (Blueprint $table) {
-            $table->increments('repoid');
+            $table->increments('rid');
             $table->integer('uid');
             $table->integer('catid');
             $table->string('repo_name');

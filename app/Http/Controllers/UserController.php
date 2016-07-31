@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 use App\User;
 use App\UserInfo;
+use App\Repository;
+use App\Category;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -22,8 +24,8 @@ class UserController extends Controller
         if($request->method() == "POST")
         {
             $this->validate($request, [
-                'username' => 'required|unique:users',
-                'password' => 'required',
+                'username' => 'required|unique:users|between:5,255',
+                'password' => 'required|between:5,255',
                 'email' => 'required|email|unique:users'
             ]);
             $userObject = new User;
@@ -141,7 +143,32 @@ class UserController extends Controller
 
     public function logoutAction(Request $request)
     {
+        echo "logout";
         $request->session()->flush();
+        return Redirect::to('/');
+    }
+
+    public function showUserIndex(Request $request, $username)
+    {
+        $data = [];
+        $tmpuid = $request->session()->get('uid');
+        $data['tmpuid'] = $tmpuid;
+        $userObj = User::where('username', $username)->first();
+        if($userObj != NULL)
+        {
+            $uid = $userObj->uid;
+            $userInfoObj = UserInfo::where('uid', $uid)->first();
+            $repoObj = Repository::where('uid', $uid)->get();
+            if($repoObj != NULL)
+            {
+                $catObj = Category::all();
+                $data['user'] = $userObj;
+                $data['userinfo'] = $userInfoObj;
+                $data['repo'] = $repoObj;
+                $data['cat'] = $catObj;
+                return View::make('user.index')->with($data);
+            }
+        }
         return Redirect::to('/');
     }
 

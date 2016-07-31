@@ -25,5 +25,6 @@
         </tr>
     </table>
     </form>
+    <a href="/">index</a>
 </body>
 </html>

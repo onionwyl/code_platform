@@ -12,9 +12,9 @@
     @endif
     <form action="/{{ $user->username }}/repository/{{ $repo->repo_name }}/edit/{{ $code->file_name }}" method="POST">
         {{ csrf_field() }}
-        <h3>{{ $repo->repo_name }}\<input type="text" name="file_name" value="@if(old('file_name') == NULL) {{ $code->file_name }} @else {{ old('file_name') }} @endif"></h3>
+        <h3><a href="/{{ $user->username }}/repository/{{ $repo->repo_name }}">{{ $repo->repo_name }}</a>\<input type="text" name="file_name" value="@if(old('file_name') == NULL){{ $code->file_name }}@else{{ old('file_name') }}@endif"></h3>
         <h3>Code</h3>
-        <textarea name="code" rows="40" cols="80">@if(old('code') == NULL) {{ $code->content }} @else {{ old('code') }} @endif</textarea>
+        <textarea name="code" rows="40" cols="80">@if(old('code') == NULL){{ $code->content }}@else{{ old('code') }}@endif</textarea>
         <input type="submit" name="submit" value="save">
     </form>
     <a href="/">index</a>

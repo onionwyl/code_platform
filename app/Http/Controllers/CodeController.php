@@ -127,7 +127,7 @@ class CodeController extends Controller
         {
             $input = $request->input();
             $codeCheckObj = Code::where(['uid' => $uid, 'rid' => $repoObj->rid, 'file_name' => $input['file_name']])->first();
-            if($codeCheckObj != NULL)
+            if($codeCheckObj != NULL && $input['file_name'] != $codeObj->file_name)
             {
                 $errMsg->add('file_name_err', 'File name exists');
                 return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/edit/$codeObj->file_name")->withInput($input)->withErrors($errMsg);
@@ -135,7 +135,7 @@ class CodeController extends Controller
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
             $codeObj->save();
-            return Redirect::to("/$user->username/repository/$repoObj->repo_name/$codeObj->file_name");
+            return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/$codeObj->file_name");
         }
         return View::make('code.edit')->with($data);
     }

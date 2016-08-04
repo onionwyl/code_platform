@@ -21,7 +21,8 @@
             <td>Password</td><td><input name="password" type="password"></td>
         </tr>
         <tr>
-            <td colspan="2" align="center"><input type="submit" value="登陆"></td>
+            <td><input type="submit" value="登陆"></td>
+            <td><a href="/resetpasswd">forgot</a>
         </tr>
     </table>
     </form>

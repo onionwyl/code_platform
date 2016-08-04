@@ -23,13 +23,21 @@ Route::match(["POST", "GET"], '/signin', [
     "uses" => "UserController@loginAction"
 ]);
 
-/*Route::get('/category', [
+Route::match(['POST', 'GET'], '/resetpasswd', [
+    "uses" => "UserController@resetPassword"
+]);
 
+Route::match(['POST', 'GET'], '/reset', [
+    "uses" => "UserController@resetPasswordAction"
+]);
+
+Route::get('/category', [
+    "uses" => "CategoryController@showCategoryList"
 ]);
 
 Route::get('/category/{cat_id}', [
-
-]);*/
+    "uses" => "CategoryController@showCategoryByCatID"
+]);
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard',[
@@ -40,17 +48,17 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "UserController@setUserProfile"
     ]);
 
-    /*Route::get('/dashboard/repository', [
-
+    Route::get('/dashboard/repository', [
+        "uses" => "RepositoryController@showDashboardRepo"
     ]);
 
     Route::delete('/dashboard/repository/{repo_name}', [
-
+        "uses" => "RepositoryController@deleteRepo"
     ]);
 
     Route::match(['GET', 'POST'], '/dashboard/repository/{repo_name}/edit', [
-
-    ]);*/
+        "uses" => "RepositoryController@editRepo"
+    ]);
 
     Route::get('/logout',[
         "uses" => "UserController@logoutAction"
@@ -86,11 +94,19 @@ Route::group(['middleware' => 'auth'], function(){
         ]);
 
         Route::get('/dashboard-admin/category', [
-
+            "uses" => "CategoryController@showAdminCategoryDashboard"
         ]);
 
         Route::match(['GET', 'POST'], '/dashboard-admin/category/add', [
+            "uses" => "CategoryController@addCategory"
+        ]);
+        
+        Route::match(['GET', 'POST'], '/dashboard-admin/category/{cat_id}/edit', [
+            "uses" => "CategoryController@editCategory"
+        ]);
 
+        Route::delete('/dashboard-admin/category/{cat_id}/delete', [
+            "uses" => "CategoryController@deleteCategory"
         ]);
     });*/
 

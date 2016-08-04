@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Repository</title>
+    <title>Edit Repository</title>
 </head>
 <body>
     @if(count($errors) > 0 )
@@ -10,17 +10,17 @@
             &nbsp;{{ $error }}
         @endforeach
     @endif
-    <form action="/new" method="POST">
+    <form action="/dashboard/repository/{{ $repo->repo_name }}/edit" method="POST">
     {{ csrf_field() }}
         <table>
             <CAPTION>Add Repository</CAPTION>
             <tr>
                 <td>Repository name</td>
-                <td><input type="text" name="repo_name"></td>
+                <td><input type="text" name="repo_name" value="{{ $repo->repo_name }}"></td>
             </tr>
             <tr>
                 <td>Repository description</td>
-                <td><input type="text" name="repo_description"></td>
+                <td><input type="text" name="repo_description" value="{{ $repo->repo_description }}"></td>
             </tr>
             <tr>
                 <td>Repository type</td>
@@ -28,7 +28,7 @@
                     <select name="type">
                         <option value="0">未分类</option>
                         @foreach($category as $cat)
-                        <option value="{{ $cat->catid }}">{{ $cat->catname }}</option>
+                        <option value="{{ $cat->catid }}" @if($repo->catid == $cat->catid) selected="selected" @endif>{{ $cat->catname }}</option>
                         @endforeach
                     </select>
                 </td>

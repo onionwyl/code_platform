@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use View;
 use Hash;
+use Mail;
 use Redirect;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\User;
 use App\UserInfo;
 use App\Repository;
 use App\Category;
+use App\PasswordReset;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -25,7 +27,7 @@ class UserController extends Controller
         {
             $this->validate($request, [
                 'username' => 'required|unique:users|between:5,255',
-                'password' => 'required|between:5,255',
+                'password' => 'required|between:5,255|confirmed',
                 'email' => 'required|email|unique:users'
             ]);
             $userObject = new User;
@@ -65,7 +67,6 @@ class UserController extends Controller
             $username = $input['username'];
             $password = $input['password'];
             $userObj = User::where('username', $username)->first();
-            echo $username;
             if(isset($userObj))
             {
                 if(Hash::check($password, $userObj->password))
@@ -170,6 +171,79 @@ class UserController extends Controller
             }
         }
         return Redirect::to('/');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $data = [];
+        $errMsg = new MessageBag;
+        if($request->method() == "POST")
+        {
+            $this->validate($request, [
+                'username' => 'required|exists:users',
+                'email' => 'required|email'
+            ]);
+            $input = $request->input();
+            $email = $input['email'];
+            $userObj = User::where('username', $input['username'])->first();
+            if($userObj->email != $input['email'])
+            {
+                $errMsg->add('missmatcherr', 'Username, email don\'t match');
+                return Redirect::to('/resetpasswd')->withInput($input)->withErrors($errMsg);
+            }
+            if(PasswordReset::where('email', $email)->first() != NULL)
+                PasswordReset::where('email', $email)->delete();
+            $pwdResetObj = new PasswordReset;
+            $pwdResetObj->email = $email;
+            $pwdResetObj->token = sha1($email . "" . time());
+            Mail::send('auth.emailrequest', ['passwordReset' => $pwdResetObj], function($message) use ($pwdResetObj){
+                $message->from('onionwyl@qq.com', 'onion');
+                $message->to($pwdResetObj->email);
+                $message->subject('[Code_platform] Reset Password Confirmation');
+            });
+            $data['info'] = "You will recieve an email for password reset, check for your mailbox";
+            $pwdResetObj->save();
+        }
+        return View::make('auth.resetpasswdcheck')->with($data);
+    }
+
+    public function resetPasswordAction(Request $request)
+    {
+        $data = [];
+        $errMsg = new MessageBag;   
+        $token = $request->get('token');
+        if($request->method() == "GET")
+        {
+            if($token == NULL)
+            {
+                return Redirect::to('/');
+            }
+            $pwdResetObj = PasswordReset::where('token', $token)->first();
+            if($pwdResetObj == NULL)
+            {
+                return Redirect::to('/');
+            }
+            $data['token'] = $token;
+            $data['email'] = $pwdResetObj->email;
+        }
+        elseif($request->method() == "POST")
+        {
+            if($token == NULL)
+            {
+                return Redirect::to('/');
+            }
+            $pwdResetObj = PasswordReset::where('token', $token)->first();
+            if($pwdResetObj == NULL)
+            {
+                return Redirect::to('/');
+            }
+            $this->validate($request, [
+                'password' => 'required|between:5,255|confirmed'
+            ]);
+            User::where('email', $pwdResetObj->email)->update(['password' => Hash::make($request->get('password'))]);
+            return Redirect::to('/signin');
+        }
+        return View::make('auth.resetpasswd')->with($data);
     }
 
 }

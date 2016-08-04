@@ -12,7 +12,7 @@
     @endif
     <form action="/{{ $user->username }}/repository/{{ $repo->repo_name }}/add" method="POST">
         {{ csrf_field() }}
-        <h3>{{ $repo->repo_name }}\<input type="text" name="file_name" value="{{ old('file_name') }}"></h3>
+        <h3><a href="/{{ $user->username }}/repository/{{ $repo->repo_name }}">{{ $repo->repo_name }}</a>\<input type="text" name="file_name" value="{{ old('file_name') }}"></h3>
         <h3>Code</h3>
         <textarea name="code" rows="40" cols="80">{{ old('code') }}</textarea>
         <input type="submit" name="submit" value="save">

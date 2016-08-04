@@ -33,7 +33,7 @@ class RepositoryController extends Controller
             if(Repository::where(['uid' => $uid, 'repo_name' => $input['repo_name']])->get()->count() > 0)
             {
                 $errMsg->add('nameErr', 'Repo name exists');
-                return View::make('repository.add')->withErrors($errMsg);
+                return Redirect::to('/new')->withErrors($errMsg);
             }
             $repoObj = new Repository;
             $repoObj->uid = $uid;
@@ -94,6 +94,63 @@ class RepositoryController extends Controller
             }
         }
         return Redirect::to('/');
+    }
+
+    public function showDashboardRepo(Request $request)
+    {
+        $data = [];
+        $uid = $request->session()->get('uid');
+        $userObj = User::where('uid', $uid)->first();
+        $userInfoObj = UserInfo::where('uid', $uid)->first();
+        $repoObj = Repository::where('uid', $uid)->get();
+        $data['user'] = $userObj;
+        $data['userinfo'] = $userInfoObj;
+        $data['repo'] = $repoObj;
+        return View::make('dashboard.repository')->with($data);
+    }
+
+    public function deleteRepo(Request $request, $repo_name)
+    {
+        $uid = $request->session()->get('uid');
+        $repoObj = Repository::where(['uid' => $uid, 'rid' => $rid])->first();
+        if($repoObj != NULL)
+        {
+            $repoObj->delete();
+        }
+        return Redirect::to('/dashboard/repository');
+    }
+
+    public function editRepo(Request $request, $repo_name)
+    {
+        $data = [];
+        $input = $request->input();
+        $uid = $request->session()->get('uid');
+        $repoObj = Repository::where(['uid' => $uid, 'repo_name' => $repo_name])->first();
+        if($repoObj == NULL)
+        {
+            return Redirect::to('/dashboard/repository');
+        }
+        $data['category'] = Category::all();
+        $data['repo'] = $repoObj;
+        if($request->method() == "POST")
+        {
+            $this->validate($request, [
+                'repo_name' => 'required|max:255',
+                'repo_description' => 'max:255'
+            ]);
+            $repoNameCheck = Repository::where(['uid' => $uid, 'repo_name' => $input['repo_name']])->first();
+            if($repoNameCheck != NULL && $input['repo_name'] != $repoObj->repo_name)
+            {
+                $errMsg->add('nameErr', 'Repo name exists');
+                return Redirect::to("/dashboard/repository/$repoObj->repo_name")->withErrors($errMsg);
+            }
+            $repoObj->repo_name = $input['repo_name'];
+            $repoObj->repo_description = $input['repo_description'];
+            $repoObj->save();
+            $username = $request->session()->get('username');
+            return Redirect::to("/$username/repository/$repoObj->repo_name");
+        }
+        return View::make('repository.edit')->with($data);
     }
 
 }

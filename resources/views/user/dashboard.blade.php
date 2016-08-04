@@ -24,6 +24,10 @@
                 <td><input name="nickname" type="text" value="{{ $userinfo->nickname }}"></td>
             </tr>
             <tr>
+                <td>email</td>
+                <td><input name="email" type="email" value="{{ $user->email }}"></td>
+            </tr>
+            <tr>
                 <td>realname</td>
                 <td><input name="realname" type="text" value="{{ $userinfo->realname }}"></td>
             </tr>

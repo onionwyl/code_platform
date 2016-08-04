@@ -72,15 +72,9 @@ class CodeController extends Controller
         if($request->method() == "POST")
         {
             $this->validate($request, [
-                'file_name' => 'required'
+                'file_name' => 'required|unique:code,file_name,NULL,cid,uid,'.$uid.',rid,'.$repoObj->rid
             ]);
             $input = $request->input();
-            $codeObj = Code::where(['uid' => $uid, 'rid' => $repoObj->rid, 'file_name' => $input['file_name']])->first();
-            if($codeObj != NULL)
-            {
-                $errMsg->add('file_name_err', 'File name exists');
-                return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/add")->withErrors($errMsg)->withInput($input);
-            }
             $codeObj = new Code;
             $codeObj->rid = $repoObj->rid;
             $codeObj->uid = $uid;
@@ -126,12 +120,9 @@ class CodeController extends Controller
         if($request->method() == "POST")
         {
             $input = $request->input();
-            $codeCheckObj = Code::where(['uid' => $uid, 'rid' => $repoObj->rid, 'file_name' => $input['file_name']])->first();
-            if($codeCheckObj != NULL && $input['file_name'] != $codeObj->file_name)
-            {
-                $errMsg->add('file_name_err', 'File name exists');
-                return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/edit/$codeObj->file_name")->withInput($input)->withErrors($errMsg);
-            }
+            $this->validate($request, [
+                'file_name' => 'required|unique:code,file_name,'.$codeObj->cid.',cid,uid,'.$uid.',rid,'.$repoObj->rid
+            ]);
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
             $codeObj->save();

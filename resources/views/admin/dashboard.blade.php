@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
+    <h2>Admin Dashboard</h2>
     
 </body>
 </html>

@@ -112,9 +112,10 @@ class RepositoryController extends Controller
     public function deleteRepo(Request $request, $repo_name)
     {
         $uid = $request->session()->get('uid');
-        $repoObj = Repository::where(['uid' => $uid, 'rid' => $rid])->first();
+        $repoObj = Repository::where(['uid' => $uid, 'repo_name' => $repo_name])->first();
         if($repoObj != NULL)
         {
+            Code::where(['uid' => $uid, 'rid' => $repoObj->rid])->delete();
             $repoObj->delete();
         }
         return Redirect::to('/dashboard/repository');
@@ -135,15 +136,9 @@ class RepositoryController extends Controller
         if($request->method() == "POST")
         {
             $this->validate($request, [
-                'repo_name' => 'required|max:255',
+                'repo_name' => 'required|max:255|unique:repository,repo_name,'.$repoObj->rid.',rid',
                 'repo_description' => 'max:255'
             ]);
-            $repoNameCheck = Repository::where(['uid' => $uid, 'repo_name' => $input['repo_name']])->first();
-            if($repoNameCheck != NULL && $input['repo_name'] != $repoObj->repo_name)
-            {
-                $errMsg->add('nameErr', 'Repo name exists');
-                return Redirect::to("/dashboard/repository/$repoObj->repo_name")->withErrors($errMsg);
-            }
             $repoObj->repo_name = $input['repo_name'];
             $repoObj->repo_description = $input['repo_description'];
             $repoObj->save();

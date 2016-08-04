@@ -76,8 +76,8 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "CodeController@editCode"
     ]);
 
-    /*Route::group(['middleware' => 'role:admin'],function(){
-        Route::get('/dashboard-admin', [
+    Route::group(['middleware' => 'role:admin'],function(){
+        /*Route::get('/dashboard-admin', [
 
         ]);
 
@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth'], function(){
 
         Route::match(['GET', 'POST'], '/dashboard-admin/users/{uid}', [
 
-        ]);
+        ]);*/
 
         Route::get('/dashboard-admin/category', [
             "uses" => "CategoryController@showAdminCategoryDashboard"
@@ -108,7 +108,7 @@ Route::group(['middleware' => 'auth'], function(){
         Route::delete('/dashboard-admin/category/{cat_id}/delete', [
             "uses" => "CategoryController@deleteCategory"
         ]);
-    });*/
+    });
 
 });
 

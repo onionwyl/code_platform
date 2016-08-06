@@ -6,7 +6,7 @@
 </div>
 <div>
     If you request for passowrd reset, Please Click the link below
-    <a href="http://localhost/reset?token={{ $passwordReset->token }}">Reset Password</a>
+    <a href="http://www.onionwyl.cn/reset?token={{ $passwordReset->token }}">Reset Password</a>
 </div>
 
 <div>Code Platform</div>

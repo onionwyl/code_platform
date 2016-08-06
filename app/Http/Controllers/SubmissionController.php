@@ -68,10 +68,23 @@ class SubmissionController extends Controller
                 $data['input'] = $submissionObj->input;
                 $data['output'] = $submissionObj->output;
                 $data['err_info'] = $submissionObj->err_info;
+                $data['run_status'] = $submissionObj->run_status;
             }
             else
                 return Redirect::to('/run');
         }
         return View::make('run')->with($data);
+    }
+
+    public function getSubmissionResult(Request $request)
+    {
+        if($request->has('sid'))
+        {
+            $submissionObj = Submission::where('sid', $request->get('sid'))->first();
+            if($submissionObj != NULL)
+            {
+                return response()->json($submissionObj);
+            }
+        }
     }
 }

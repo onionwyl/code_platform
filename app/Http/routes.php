@@ -43,6 +43,10 @@ Route::match(['GET', 'POST'], '/run', [
     "uses" => "SubmissionController@runCode"
 ]);
 
+Route::get('/ajax/submission', [
+    "uses" => "SubmissionController@getSubmissionResult"
+]);
+
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard',[
         "uses" => "UserController@showUserDashboard"

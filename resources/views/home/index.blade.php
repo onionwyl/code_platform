@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1 align="center">Welcome!</h1>
+    <p><a href="/run">Online Compiler</a></p>
     @if(!Request::session()->has('username'))
         <a href="/signin">signin</a>
         <a href="/signup">signup</a>

@@ -33,6 +33,10 @@ class HomeController extends Controller
             {
                 $userCatObj[$i]->count = Repository::select('rid')->where(['uid' => $uid, 'catid' => $userCatObj[$i]->catid])->get()->count();
             }
+            $data['user'] = $userObj;
+            $data['userinfo'] = $userInfoObj;
+            $data['userrepo'] = $userRepoObj;
+            $data['usercat'] = $userCatObj;
         }
         $repoObj = Repository::all();
         for($i = 0; $i < $repoObj->count(); $i++)
@@ -44,10 +48,6 @@ class HomeController extends Controller
         {
             $categoryObj[$i]->count = Repository::select('rid')->where('catid', $categoryObj[$i]->catid)->get()->count();
         }
-        $data['user'] = $userObj;
-        $data['userinfo'] = $userInfoObj;
-        $data['userrepo'] = $userRepoObj;
-        $data['usercat'] = $userCatObj;
         $data['repos'] = $repoObj;
         $data['cats'] = $categoryObj;
         return View::make("home.index")->with($data);

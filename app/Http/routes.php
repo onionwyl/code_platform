@@ -39,6 +39,10 @@ Route::get('/category/{cat_id}', [
     "uses" => "CategoryController@showCategoryByCatID"
 ]);
 
+Route::match(['GET', 'POST'], '/run', [
+    "uses" => "SubmissionController@runCode"
+]);
+
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard',[
         "uses" => "UserController@showUserDashboard"
@@ -112,6 +116,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 });
 
+Route::get('/api/getcode', [
+    "uses" => "ApiController@getCode"
+]);
+
+Route::get('/api/putresult', [
+    "uses" => "ApiController@putResult"
+]);
+
 Route::get('/{username}', [
     "uses" => "UserController@showUserIndex"
 ]);
@@ -136,3 +148,4 @@ Route::get('/{username}/category', [
 Route::get('/{username}/category/{cat_id}', [
 
 ]);*/
+

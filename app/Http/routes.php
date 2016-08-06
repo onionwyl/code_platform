@@ -120,7 +120,7 @@ Route::get('/api/getcode', [
     "uses" => "ApiController@getCode"
 ]);
 
-Route::get('/api/putresult', [
+Route::post('/api/putresult', [
     "uses" => "ApiController@putResult"
 ]);
 

@@ -13,13 +13,13 @@ class CreateUserinfoTable extends Migration
     public function up()
     {
         Schema::create('userinfo', function (Blueprint $table) {
+            $table->increments('infoid');
             $table->integer('uid')->unique();
             $table->string('nickname');
             $table->string('realname');
             $table->string('signature');
             $table->string('introduction');
             $table->timestamps();
-            $table->foreign('uid')->references('uid')->on('users')->onDelete('cascade');
         });
     }
 

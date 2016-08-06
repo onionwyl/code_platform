@@ -18,10 +18,10 @@
         <h3>Input</h3>
         <textarea name="input" rows="10" cols="80">@if(old('input') == NULL){{ $input }}@else{{ old('input') }}@endif</textarea>
         <h3>Output</h3>
-        <textarea name="output" rows="10" cols="80">{{ $output }}</textarea>
+        <textarea name="output" rows="10" cols="80">@if($err_info != ""){{ $err_info }}@else{{ $output }}@endif</textarea>
         <select name="lang">
             <option value="C">C</option>
-            <option value="C++">C++</option>
+            
         </select>
         <input type="submit" name="submit" value="Run">
     </form>

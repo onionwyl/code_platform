@@ -20,9 +20,9 @@ class ApiController extends Controller
     public function putResult(Request $request)
     {
         $input = $request->input();
-        $submissionObj = Submission::where('sid', $input['sid'])->first();
-        $submissionObj->output = $input['output'];
-        $submissionObj->err_info = $input['err_info'];
+        $submissionObj = Submission::where('sid', $input['Sid'])->first();
+        $submissionObj->output = $input['Output'];
+        $submissionObj->err_info = $input['Err_info'];
         $submissionObj->run_status = 2;
         $submissionObj->update();
     }

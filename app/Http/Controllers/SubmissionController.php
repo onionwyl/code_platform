@@ -51,6 +51,7 @@ class SubmissionController extends Controller
         $data['code'] = "";
         $data['input'] = "";
         $data['output'] = "";
+        $data['err_info'] = "";
         if($request->has('cid'))
         {
             $codeObj = Code::where('cid', $request->get('cid'))->first();
@@ -66,6 +67,7 @@ class SubmissionController extends Controller
                 $data['code'] = $submissionObj->code;
                 $data['input'] = $submissionObj->input;
                 $data['output'] = $submissionObj->output;
+                $data['err_info'] = $submissionObj->err_info;
             }
             else
                 return Redirect::to('/run');

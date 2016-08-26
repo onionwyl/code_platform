@@ -273,7 +273,7 @@ class UserController extends Controller
         else
         {
             $request->session()->put([
-                "userqq" => $userQqObj;
+                "userqq" => $userQqObj
             ]);
             return Redirect::to('/signupqq');
         }
@@ -285,7 +285,7 @@ class UserController extends Controller
         {
             $data = [];
             $input = $request->input();
-            $userQqObj = $request->session->get('userqq');
+            $userQqObj = $request->session()->get('userqq');
             if($request->method() == "POST")
             {
                 $this->validate($request, [
@@ -308,11 +308,13 @@ class UserController extends Controller
                     "username" => $userObject->username,
                     "uid" => $userObject->uid
                 ]);
+                $request->session()->forget('userqq');
                 $userInfoObj = new UserInfo;
                 $userInfoObj->uid = $userObject->uid;
+                $userInfoObj->nickname = $userQqObj->nickname;
                 $userInfoObj->save();
                 $client = new Client();
-                $response = $client->get($userQqObj, ['save_to' => public_path('/avatar/a.jpg')]);  //保存远程url到文件
+                $response = $client->get($userQqObj->getAvatar(), ['save_to' => public_path('avatar/'.$userObject->uid.'.jpg')]);
                 return Redirect::to("/");
             }
             return View::make('auth.registerwithQQ');
@@ -324,7 +326,7 @@ class UserController extends Controller
     {
         if($request->session()->has('userqq'))
         {
-            $userQqObj = $request->session->get('userqq');
+            $userQqObj = $request->session()->get('userqq');
             $data = [];
             $input = $request->input();
             $errMsg = new MessageBag;
@@ -343,6 +345,7 @@ class UserController extends Controller
                         "username" => $userObj->username,
                         "uid" => $userObj->uid
                     ]);
+                    $request->session()->forget('userqq');
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
                         'lastlogin_time' => date('Y-m-d h:i:s'),

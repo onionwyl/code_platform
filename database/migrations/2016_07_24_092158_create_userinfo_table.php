@@ -19,6 +19,8 @@ class CreateUserinfoTable extends Migration
             $table->string('realname');
             $table->string('signature');
             $table->string('introduction');
+            $table->string('qq');
+            $table->string('sex');
             $table->timestamps();
         });
     }

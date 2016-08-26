@@ -17,7 +17,7 @@
             <caption>{{ $user->username }} profile</caption>
             <tr>
             <td></td>
-                <td><img src="/avator/{{ $user->uid }}.jpg" height="100" width="100" align="center"></td>
+                <td><img src="/avatar/{{ $user->uid }}.jpg" height="100" width="100" align="center"></td>
             </tr>
             <tr>
                 <td>nickname</td>
@@ -40,7 +40,7 @@
                 <td><textarea name="introduction">{{ $userinfo->introduction }}</textarea></td>
             </tr>
             <tr>
-                <td>avator</td>
+                <td>avatar</td>
                 <td><input  type="file" name="image" accept="image/*"></td>
             </tr>
             <tr>

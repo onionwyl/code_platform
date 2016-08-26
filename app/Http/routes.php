@@ -31,6 +31,14 @@ Route::get('/qqlogincallback', [
     "uses" => "UserController@handleProviderCallback"
 ]);
 
+Route::match(["POST", "GET"], '/signupqq', [
+    "uses" => "UserController@registerWithQQ"
+]);
+
+Route::match(["POST", "GET"], '/bindqq', [
+    "uses" => "UserController@bindQQ"
+]);
+
 Route::match(['POST', 'GET'], '/resetpasswd', [
     "uses" => "UserController@resetPassword"
 ]);

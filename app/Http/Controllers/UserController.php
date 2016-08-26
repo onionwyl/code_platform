@@ -9,6 +9,7 @@ use Redirect;
 use Socialite;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 
 use App\User;
 use App\UserInfo;
@@ -49,7 +50,6 @@ class UserController extends Controller
             $userInfoObj->uid = $userObject->uid;
             $userInfoObj->save();
             return Redirect::to("/");
-
         }
         return View::make("auth.signup");
     }
@@ -131,7 +131,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $image->move('./avator/', "$uid.jpg");
+                    $image->move('./avatar/', "$uid.jpg");
                 }
             }
         }
@@ -247,15 +247,119 @@ class UserController extends Controller
         return View::make('auth.resetpasswd')->with($data);
     }
 
-    public function redirectToProvider()
+    public function redirectToProvider(Request $request)
     {
         return Socialite::driver('qq')->redirect();
     }
 
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
-        $user = Socialite::driver('qq')->user();
-        var_dump($user);
+        $userQqObj = Socialite::driver('qq')->user();
+        $userObj = User::where('openid', $userQqObj->getId())->first();
+        if($userObj != null)
+        {
+            $request->session()->put([
+                "username" => $userObj->username,
+                "uid" => $userObj->uid
+            ]);
+            $userObj->where('uid', $userObj->uid)->update([
+                'lastlogin_ip' => $request->ip(),
+                'lastlogin_time' => date('Y-m-d h:i:s')
+            ]);
+            if($request->session()->get('lastUrl')!=NULL)
+                return Redirect::to($request->session()->get('lastUrl'));
+            return Redirect::to("/");
+        }
+        else
+        {
+            $request->session()->put([
+                "userqq" => $userQqObj;
+            ]);
+            return Redirect::to('/signupqq');
+        }
+    }
+
+    public function registerWithQQ(Request $request)
+    {
+        if($request->session()->has('userqq'))
+        {
+            $data = [];
+            $input = $request->input();
+            $userQqObj = $request->session->get('userqq');
+            if($request->method() == "POST")
+            {
+                $this->validate($request, [
+                    'username' => 'required|unique:users|between:5,255',
+                    'password' => 'required|between:5,255|confirmed',
+                    'email' => 'required|email|unique:users'
+                ]);
+                $userObject = new User;
+                $userObject->username = $input['username'];
+                $userObject->password = Hash::make($input['password']);
+                $userObject->email = $input['email'];
+                $userObject->registration_time = date("Y-m-d h:i:s");
+                $userObject->registration_ip = $request->ip();
+                $userObject->lastlogin_ip = $request->ip();
+                $userObject->gid = 1;
+                $userObject->openid = $userQqObj->getId();
+                $userObject->save();
+                $userObject=User::where('username',$request->username)->first();
+                $request->session()->put([
+                    "username" => $userObject->username,
+                    "uid" => $userObject->uid
+                ]);
+                $userInfoObj = new UserInfo;
+                $userInfoObj->uid = $userObject->uid;
+                $userInfoObj->save();
+                $client = new Client();
+                $response = $client->get($userQqObj, ['save_to' => public_path('/avatar/a.jpg')]);  //保存远程url到文件
+                return Redirect::to("/");
+            }
+            return View::make('auth.registerwithQQ');
+        }
+        return Redirect::to('/');
+    }
+
+    public function bindQQ(Request $request)
+    {
+        if($request->session()->has('userqq'))
+        {
+            $userQqObj = $request->session->get('userqq');
+            $data = [];
+            $input = $request->input();
+            $errMsg = new MessageBag;
+            if($request->method() == "POST")
+            {
+                $this->validate($request, [
+                    'username' => 'required|exists:users,username',
+                    'password' => 'required'
+                ]);
+                $username = $input['username'];
+                $password = $input['password'];
+                $userObj = User::where('username', $username)->first();
+                if(Hash::check($password, $userObj->password))
+                {
+                    $request->session()->put([
+                        "username" => $userObj->username,
+                        "uid" => $userObj->uid
+                    ]);
+                    $userObj->where('uid', $userObj->uid)->update([
+                        'lastlogin_ip' => $request->ip(),
+                        'lastlogin_time' => date('Y-m-d h:i:s'),
+                        'openid' => $userQqObj->getId()
+                    ]);
+                    if($request->session()->get('lastUrl')!=NULL)
+                        return Redirect::to($request->session()->get('lastUrl'));
+                    return Redirect::to("/");
+                }
+                else
+                {
+                    $errMsg->add('passwdErr', 'Invalid Password!');
+                }
+            }
+            return View::make('auth.bindQQ')->withErrors($errMsg);
+        }
+        return Redirect::to('/');
     }
 
 }

@@ -6,6 +6,7 @@ use View;
 use Hash;
 use Mail;
 use Redirect;
+use Socialite;
 use Illuminate\Support\MessageBag;
 use Illuminate\Http\Request;
 
@@ -244,6 +245,17 @@ class UserController extends Controller
             return Redirect::to('/signin');
         }
         return View::make('auth.resetpasswd')->with($data);
+    }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('qq')->redirect();
+    }
+
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('qq')->user();
+        var_dump($user);
     }
 
 }

@@ -23,6 +23,14 @@ Route::match(["POST", "GET"], '/signin', [
     "uses" => "UserController@loginAction"
 ]);
 
+Route::get('/qqlogin', [
+    "uses" => "UserController@redirectToProvider"
+]);
+
+Route::get('/qqlogincallback', [
+    "uses" => "UserController@handleProviderCallback"
+]);
+
 Route::match(['POST', 'GET'], '/resetpasswd', [
     "uses" => "UserController@resetPassword"
 ]);

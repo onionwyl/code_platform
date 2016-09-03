@@ -32,7 +32,7 @@
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" placeholder="email" name="email">
             </div>
-            <button type="submit" class="btn btn-default">Sign up</button>
+            <button type="submit" class="btn btn-default">Sign up</button><a href="/qqlogin" class="col-lg-offset-1"><img src="/img/bt_blue_76X24.png"></a>
         </form>
     </div>
     @include("layout.footer")

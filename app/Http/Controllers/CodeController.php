@@ -81,7 +81,7 @@ class CodeController extends Controller
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
             $codeObj->description = $input['description'];
-            $repoObj->update_time = date('Y-m-d h:i:s');
+            $repoObj->update_time = date('Y-m-d H:i:s');
             $codeObj->save();
             $repoObj->save();
             return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/$codeObj->file_name");
@@ -133,7 +133,7 @@ class CodeController extends Controller
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
             $codeObj->description = $input['description'];
-            $repoObj->update_time = date('Y-m-d h:i:s');
+            $repoObj->update_time = date('Y-m-d H:i:s');
             $codeObj->save();
             $repoObj->save();
             return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/$codeObj->file_name");

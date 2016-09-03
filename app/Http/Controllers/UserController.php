@@ -78,7 +78,7 @@ class UserController extends Controller
                     ]);
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
-                        'lastlogin_time' => date('Y-m-d h:i:s')
+                        'lastlogin_time' => date('Y-m-d H:i:s')
                     ]);
                     if($request->session()->get('lastUrl')!=NULL)
                         return Redirect::to($request->session()->get('lastUrl'));
@@ -265,7 +265,7 @@ class UserController extends Controller
             ]);
             $userObj->where('uid', $userObj->uid)->update([
                 'lastlogin_ip' => $request->ip(),
-                'lastlogin_time' => date('Y-m-d h:i:s')
+                'lastlogin_time' => date('Y-m-d H:i:s')
             ]);
             if($request->session()->get('lastUrl')!=NULL)
                 return Redirect::to($request->session()->get('lastUrl'));
@@ -349,7 +349,7 @@ class UserController extends Controller
                     $request->session()->forget('userqq');
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
-                        'lastlogin_time' => date('Y-m-d h:i:s'),
+                        'lastlogin_time' => date('Y-m-d H:i:s'),
                         'openid' => $userQqObj->getId()
                     ]);
                     if($request->session()->get('lastUrl')!=NULL)

@@ -40,7 +40,7 @@ class RepositoryController extends Controller
             $repoObj->repo_name = $input['repo_name'];
             $repoObj->catid = $input['type'];
             $repoObj->repo_description = $input['repo_description'];
-            $repoObj->update_time = date('Y-m-d h:i:s');
+            $repoObj->update_time = date('Y-m-d H:i:s');
             $repoObj->save();
             $username = $request->session()->get('username');
             return Redirect::to("/$username/repository/$repoObj->repo_name");
@@ -144,7 +144,7 @@ class RepositoryController extends Controller
             $repoObj->repo_name = $input['repo_name'];
             $repoObj->repo_description = $input['repo_description'];
             $repoObj->catid = $input['type'];
-            $repoObj->update_time = date('Y-m-d h:i:s');
+            $repoObj->update_time = date('Y-m-d H:i:s');
             $repoObj->save();
             $username = $request->session()->get('username');
             return Redirect::to("/$username/repository/$repoObj->repo_name");

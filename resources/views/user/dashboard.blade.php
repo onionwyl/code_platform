@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
+    @include("layout.head")
 </head>
 <body>
+    @include("layout.header")
     <h1>dashboard</h1>
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
@@ -49,5 +51,6 @@
             </tr>
         </table>
     </form>
+    @include("layout.footer")
 </body>
 </html>

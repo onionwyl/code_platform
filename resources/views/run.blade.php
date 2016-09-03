@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Compiler</title>
-    <script src="/js/jquery-3.1.0.min.js"></script>
+    @include("layout.head")
+    @include("layout.codehead")
 </head>
 <body>
+    @include("layout.header")
     <h2>Online Compiler</h2>
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
@@ -15,18 +17,18 @@
     <form action="/run" method="POST">
         {{ csrf_field() }}
         <h3>Code</h3>
-        <textarea name="code" rows="25" cols="80">@if(old('code') == NULL){{ $code }}@else{{ old('code') }}@endif</textarea>
-        <h3>Input</h3>
-        <textarea name="input" rows="10" cols="80">@if(old('input') == NULL){{ $input }}@else{{ old('input') }}@endif</textarea>
-        <h3>Output</h3>
-        <textarea name="output" rows="10" cols="80" id="output">@if($err_info != "" && $run_status == 2){{ $err_info }}@else{{ $output }}@endif</textarea>
         <select name="lang">
             <option value="C">C</option>
-            
         </select>
-        <input type="submit" name="submit" value="Run">
+        <button type="submit" class="btn btn-primary btn-sm">Run</button>
+        <textarea name="code" id="code" rows="20" cols="80">@if(old('code') == NULL){{ $code }}@else{{ old('code') }}@endif</textarea>
+        <h3>Input</h3>
+        <textarea name="input" id="input" rows="5" cols="80">@if(old('input') == NULL){{ $input }}@else{{ old('input') }}@endif</textarea>
+        <h3>Output</h3>
+        <textarea name="output" rows="5" cols="80" id="output">@if($err_info != "" && $run_status == 2){{ $err_info }}@else{{ $output }}@endif</textarea>
+        
+        
     </form>
-    <a href="/">index</a>
 
     <script type="text/javascript">
         @if(Request::has('sid'))
@@ -56,5 +58,27 @@
         }
         @endif
     </script>
+    <script type="text/javascript">
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+          extraKeys: {"Ctrl-Space": "autocomplete"},
+          mode: {name: "text/x-csrc", globalVars: true},
+          theme: "panda-syntax"
+        });
+        var editor1 = CodeMirror.fromTextArea(document.getElementById("input"), {
+          lineNumbers: true,
+          matchBrackets: true,
+          extraKeys: {"Ctrl-Space": "autocomplete"},
+          theme: "panda-syntax"
+        });
+        var editor2 = CodeMirror.fromTextArea(document.getElementById("output"), {
+          lineNumbers: true,
+          matchBrackets: true,
+          extraKeys: {"Ctrl-Space": "autocomplete"},
+          theme: "panda-syntax"
+        });
+    </script>
+    @include("layout.footer")
 </body>
 </html>

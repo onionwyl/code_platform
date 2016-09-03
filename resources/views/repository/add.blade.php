@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Repository</title>
+    @include("layout.head")
 </head>
 <body>
+    @include("layout.header")
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
             &nbsp;{{ $error }}
@@ -39,5 +41,6 @@
             </tr>
         </table>
     </form>
+    @include("layout.footer")
 </body>
 </html>

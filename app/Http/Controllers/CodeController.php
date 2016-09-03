@@ -37,8 +37,8 @@ class CodeController extends Controller
                     $data['userinfo'] = $userInfoObj;
                     $data['repo'] = $repoObj;
                     $data['code'] = $codeObj;
+                    return View::make('code.index')->with($data);
                 }
-                return View::make('code.index')->with($data);
             }
         }
         return Redirect::to('/');
@@ -80,7 +80,10 @@ class CodeController extends Controller
             $codeObj->uid = $uid;
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
+            $codeObj->description = $input['description'];
+            $repoObj->update_time = date('Y-m-d h:i:s');
             $codeObj->save();
+            $repoObj->save();
             return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/$codeObj->file_name");
         }
         return View::make('code.add')->with($data);
@@ -88,6 +91,10 @@ class CodeController extends Controller
 
     public function editCode(Request $request, $username, $repo_name, $file_name)
     {
+        if($file_name == "")
+        {
+            return Redirect::to('/');
+        }
         $data = [];
         $errMsg = new MessageBag;
         $tmpuid = $request->session()->get('uid');
@@ -125,7 +132,10 @@ class CodeController extends Controller
             ]);
             $codeObj->file_name = $input['file_name'];
             $codeObj->content = $input['code'];
+            $codeObj->description = $input['description'];
+            $repoObj->update_time = date('Y-m-d h:i:s');
             $codeObj->save();
+            $repoObj->save();
             return Redirect::to("/$userObj->username/repository/$repoObj->repo_name/$codeObj->file_name");
         }
         return View::make('code.edit')->with($data);

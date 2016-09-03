@@ -20,13 +20,14 @@ class CategoryController extends Controller
     public function showCategoryList(Request $request)
     {
         $data = [];
+        $data['cats'] = [];
         $categoryObj = Category::all();
         for($i = 0; $i < $categoryObj->count(); $i++)
         {
             $categoryObj[$i]->count = Repository::select('rid')->where('catid', $categoryObj[$i]->catid)->get()->count();
         }
         $data["cats"] = $categoryObj;
-        return View::make('category.list');
+        return View::make('category.list')->with($data);
     }
 
     public function showCategoryByCatID(Request $request, $cat_id)
@@ -50,6 +51,10 @@ class CategoryController extends Controller
     {
         $data = [];
         $categoryObj = Category::all();
+        for($i = 0; $i < $categoryObj->count(); $i++)
+        {
+            $categoryObj[$i]->count = Repository::select('rid')->where('catid', $categoryObj[$i]->catid)->get()->count();
+        }
         $data['cats'] = $categoryObj;
         return View::make('admin.catlist')->with($data);
     }
@@ -65,7 +70,7 @@ class CategoryController extends Controller
             $categoryObj = new Category;
             $categoryObj->catname = $request->get('catname');
             $categoryObj->save();
-            return Redirect::to('/dashboard-admin/category')
+            return Redirect::to('/dashboard-admin/category');
         }
         return View::make('category.add');
     }
@@ -95,7 +100,7 @@ class CategoryController extends Controller
             return Redirect::to ('/dashboard-admin/category');
         Repository::where('cid', $cat_id)->update(['cid' => 0]);
         $categoryObj->delete();
-        return Redirect::to('/dashboard-admin/category')
+        return Redirect::to('/dashboard-admin/category');
     }
 
 }

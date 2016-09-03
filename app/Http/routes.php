@@ -51,6 +51,10 @@ Route::get('/category', [
     "uses" => "CategoryController@showCategoryList"
 ]);
 
+Route::get('/repository', [
+    "uses" => "RepositoryController@showRepos"
+]);
+
 Route::get('/category/{cat_id}', [
     "uses" => "CategoryController@showCategoryByCatID"
 ]);
@@ -92,12 +96,18 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "RepositoryController@addRepository"
     ]);
 
-    Route::match(['GET', 'POST'], '/{username}/repository/{repo_name}/add', [
-        "uses" => "CodeController@addCode"
+    
+
+    Route::post('/comments/add', [
+        "uses" => "CommentController@addComment"
     ]);
 
-    Route::match(['GET', 'POST'], '/{username}/repository/{repo_name}/edit/{file_name}', [
-        "uses" => "CodeController@editCode"
+    Route::post('/comments/reply', [
+        "uses" => "CommentController@replyComment"
+    ]);
+
+    Route::delete('/comments/delete/{{comment_id}}', [
+        "uses" => "CommentController@deleteComment"
     ]);
 
     Route::group(['middleware' => 'role:admin'],function(){
@@ -158,6 +168,16 @@ Route::get('/{username}/repository/{repo_name}', [
 
 Route::get('/{username}/repository/{repo_name}/{file_name}', [
     "uses" => "CodeController@showCode"
+]);
+
+Route::match(['GET', 'POST'], '/{username}/repository/{repo_name}/file/add', [
+    "uses" => "CodeController@addCode",
+    "middleware" => "auth"
+]);
+
+Route::match(['GET', 'POST'], '/{username}/repository/{repo_name}/edit/{file_name}', [
+    "uses" => "CodeController@editCode",
+    "middleware" => "auth"
 ]);
 
 /*

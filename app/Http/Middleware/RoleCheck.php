@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Redirect;
+use App\User;
 
 class RoleCheck
 {

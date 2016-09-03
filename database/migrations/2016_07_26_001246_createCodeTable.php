@@ -18,6 +18,7 @@ class CreateCodeTable extends Migration
             $table->integer('rid');
             $table->string('file_name');
             $table->longText('content');
+            $table->longText('description');
             $table->timestamps();
          });
     }

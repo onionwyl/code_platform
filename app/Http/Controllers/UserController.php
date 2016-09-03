@@ -61,7 +61,7 @@ class UserController extends Controller
         $errMsg = new MessageBag;
         if($request->method() == "POST")
         {
-            $this->validate($request,[
+            $this->validate($request, [
                 'username' => 'required',
                 'password' => 'required'
             ]);
@@ -140,7 +140,8 @@ class UserController extends Controller
 
     public function showUserDashboard(Request $request)
     {
-        return Redirect::to('/dashboard/profile');
+        //return Redirect::to('/dashboard/profile');
+        return View::make('dashboard.index');
     }
 
     public function logoutAction(Request $request)

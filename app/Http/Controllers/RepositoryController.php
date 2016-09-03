@@ -38,7 +38,9 @@ class RepositoryController extends Controller
             $repoObj = new Repository;
             $repoObj->uid = $uid;
             $repoObj->repo_name = $input['repo_name'];
+            $repoObj->catid = $input['type'];
             $repoObj->repo_description = $input['repo_description'];
+            $repoObj->update_time = date('Y-m-d h:i:s');
             $repoObj->save();
             $username = $request->session()->get('username');
             return Redirect::to("/$username/repository/$repoObj->repo_name");
@@ -141,11 +143,25 @@ class RepositoryController extends Controller
             ]);
             $repoObj->repo_name = $input['repo_name'];
             $repoObj->repo_description = $input['repo_description'];
+            $repoObj->catid = $input['type'];
+            $repoObj->update_time = date('Y-m-d h:i:s');
             $repoObj->save();
             $username = $request->session()->get('username');
             return Redirect::to("/$username/repository/$repoObj->repo_name");
         }
         return View::make('repository.edit')->with($data);
+    }
+
+    public function showRepos(Request $request)
+    {
+        $data = [];
+        $repoObj = Repository::all();
+        for($i = 0; $i < $repoObj->count(); $i++)
+        {
+            $repoObj[$i]->username = User::where('uid', $repoObj[$i]->uid)->first()->username;
+        }
+        $data['repos'] = $repoObj;
+        return View::make('repository.repos')->with($data);
     }
 
 }

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Reset Password</title>
+    @include("layout.head")
 </head>
 <body>
+    @include("layout.header")
     <form action="/reset" method="POST">
         {{ csrf_field() }}
         <input type="hidden" name="token" value={{ $token }}>
@@ -22,5 +24,6 @@
             </tr>
         </table>
     </form>
+    @include("layout.footer")
 </body>
 </html>

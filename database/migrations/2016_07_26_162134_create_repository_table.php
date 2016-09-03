@@ -18,6 +18,7 @@ class CreateRepositoryTable extends Migration
             $table->integer('catid');
             $table->string('repo_name');
             $table->string('repo_description');
+            $table->dateTime('update_time');
             $table->timestamps();
          });
     }

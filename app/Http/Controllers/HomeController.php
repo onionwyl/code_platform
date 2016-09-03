@@ -42,6 +42,7 @@ class HomeController extends Controller
         for($i = 0; $i < $repoObj->count(); $i++)
         {
             $repoObj[$i]->username = User::where('uid', $repoObj[$i]->uid)->first()->username;
+    
         }
         $categoryObj = Category::all();
         for($i = 0; $i < $categoryObj->count(); $i++)

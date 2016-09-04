@@ -114,6 +114,10 @@ class UserController extends Controller
         $data['userinfo'] = $userInfoObj;
         if($request->method() == "POST")
         {
+            $this->validate($request, [
+                'email' => 'required|email|unique:users,email,'.$userObj->uid.',uid',
+                'nickname' => 'required|unique:userinfo,nickname,'.$userInfoObj->infoid.',infoid'
+            ]);
             $input = $request->input();
             $userInfoObj->nickname = $input['nickname'];
             if(isset($input['realname']))
@@ -122,11 +126,15 @@ class UserController extends Controller
                 $userInfoObj->signature = $input['signature'];
             if(isset($input['introduction']))
                 $userInfoObj->introduction = $input['introduction'];
+            if(isset($input['email']))
+                $userObj->email = $input['email'];
+            $data['user'] = $userObj;
             $data['userinfo'] = $userInfoObj;
+            $userObj->save();
             $userInfoObj->save();
-            if($request->hasFile('image'))
+            if($request->hasFile('avatar'))
             {
-                $image = $request->file('image');
+                $image = $request->file('avatar');
                 if($image->getClientSize() > 2097152)
                 {
                     $errMsg->add('sizeErr', 'Image file is larger than 2M!');
@@ -140,14 +148,15 @@ class UserController extends Controller
                     $image->move('./avatar/', "$uid.jpg");
                 }
             }
+            return Redirect::to('/dashboard/profile')->withErrors($errMsg);
         }
-        return View::make('user.dashboard')->with($data)->withErrors($errMsg);
+        return View::make('dashboard.profile')->with($data);
     }
 
     public function showUserDashboard(Request $request)
     {
-        //return Redirect::to('/dashboard/profile');
-        return View::make('dashboard.index');
+        return Redirect::to('/dashboard/profile');
+        //return View::make('dashboard.index');
     }
 
     public function logoutAction(Request $request)
@@ -370,6 +379,25 @@ class UserController extends Controller
             return View::make('auth.bindQQ')->withErrors($errMsg);
         }
         return Redirect::to('/');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $data = [];
+        if($request->method() == "POST")
+        {
+            $this->validate($request, [
+                'oldpassword' => 'required',
+                'password' => 'required|between:5,255|confirmed'
+            ]);
+            $userObj = User::where('uid', $request->session()->get('uid'))->first();
+            if(Hash::check($request->input('password'), $userObj->password))
+            {
+                $userObj->password = Hash::make($request->input('password'));
+                $data['passchange'] = "Password changed successfully.";
+            }
+        }
+        return View::make('dashboard.account')->with($data);
     }
 
 }

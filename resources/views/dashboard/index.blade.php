@@ -11,6 +11,10 @@
         <p><a href="/dashboard/profile">Profile</a></p>
         <p><a href="/dashboard/repository">Repository</a></p>
     </div>
+    @include("layout.dashboard")
+    <div class="col-lg-9">
+
+    </div>
     @include("layout.footer")
 </body>
 </html>

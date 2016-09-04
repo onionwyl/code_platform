@@ -7,11 +7,16 @@
 </head>
 <body>
     @include("layout.header")
-    <h2>Category</h2>
-    @foreach($cats as $cat)
-        <a href="/category/{{ $cat->catid }}">{{ $cat->catname }}({{ $cat->count }})</a><br>
-    @endforeach
-    <br><a href="/">index</a>
+    <div class="col-lg-2 col-lg-offset-5">
+    <h3 class="text-center">Category</h3>
+    <table class="table table-hover">
+        @foreach($cats as $cat)
+        <tr onclick="window.location.href='/category/{{ $cat->catid }}'">
+            <th><a href="/category/{{ $cat->catid }}">{{ $cat->catname }}({{ $cat->count }})</a></th>
+        </tr>
+        @endforeach
+    </table>
+    </div>
     @include("layout.footer")
 </body>
 </html>

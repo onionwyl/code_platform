@@ -88,6 +88,10 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "RepositoryController@editRepo"
     ]);
 
+    Route::match(['GET', 'POST'], '/dashboard/account', [
+        "uses" => "UserController@changePassword"
+    ]);
+
     Route::get('/logout',[
         "uses" => "UserController@logoutAction"
     ]);
@@ -95,8 +99,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::match(['GET', 'POST'], '/new', [
         "uses" => "RepositoryController@addRepository"
     ]);
-
-    
 
     Route::post('/comments/add', [
         "uses" => "CommentController@addComment"

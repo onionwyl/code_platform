@@ -22,6 +22,9 @@
         <div class="col-lg-9">
             @if((Request::session()->has('uid') && Request::session()->get('uid') == $user->uid))
             <div class="alert alert-info">
+            <a href="#" class="close" data-dismiss="alert">
+                &times;
+            </a>
                 ProTip! Updating your profile with your nickname, introduction, and a profile picture helps other users get to know you.  <a class="btn btn-success" href="/dashboard/profile">Edit Profile</a>
             </div>
             @endif

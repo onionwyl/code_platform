@@ -10,7 +10,7 @@
     <h3><span class="glyphicon glyphicon-book"></span> <a href="/{{ $user->username }}/repository/">{{ $user->username }}</a>/<a href="/{{ $user->username }}/repository/{{ $repo->repo_name }}">{{ $repo->repo_name }}</a></h3>
     <hr/>
     <h4><div class="col-lg-10"><em>{{ $repo->repo_description }}</em></div>
-    <div class="col-lg-2 text-right">@if($cat != NULL){{ $cat->cat_name }}@else unclassified @endif</div></h4>
+    <div class="col-lg-2 text-right">@if($cat != NULL){{ $cat->catname }}@else unclassified @endif</div></h4>
     <hr/>
     <div class="pull-right">
     @if((Request::session()->has('uid') && Request::session()->get('uid') == $user->uid))

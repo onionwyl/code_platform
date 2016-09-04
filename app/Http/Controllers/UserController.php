@@ -76,6 +76,12 @@ class UserController extends Controller
                         "username" => $userObj->username,
                         "uid" => $userObj->uid
                     ]);
+                    if($userObj->gid == 0)
+                    {
+                        $request->session()->put([
+                        "gid" => $userObj->gid,
+                    ]);
+                    }
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
                         'lastlogin_time' => date('Y-m-d H:i:s')

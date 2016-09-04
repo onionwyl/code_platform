@@ -22,6 +22,10 @@
                 <ul class="dropdown-menu">
                     <li><a href="/dashboard"><img src="/avatar/{{Request::session()->get('uid')}}.jpg" height="50" width="50" /><br/>Dashboard</a></li>
                     <li class="divider"></li>
+                    @if(Request::session()->has('gid') && Request::session()->get('gid') == 0)
+                    <li><a href="/dashboard-admin">admin-dashboard</a></li>
+                    @endif
+                    <li class="divider"></li>
                     <li><a href="/logout">Log out</a></li>
                 </ul>
             </li>

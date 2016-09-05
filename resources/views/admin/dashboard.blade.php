@@ -7,7 +7,8 @@
 </head>
 <body>
     @include("layout.header")
-    <h2>Admin Dashboard</h2>
+    @include("layout.admin-dashboard")
+        <iframe class="col-lg-9" height="800" frameborder="0" src="/dashboard-admin/systeminfo"></iframe>
     @include("layout.footer")
 </body>
 </html>

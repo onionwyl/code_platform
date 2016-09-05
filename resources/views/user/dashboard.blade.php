@@ -10,7 +10,7 @@
     <h1>dashboard</h1>
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
-            &nbsp;{{ $error }}
+            <div class="alert alert-danger"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{$error}}</div>
         @endforeach
     @endif
     <form action="/dashboard/profile" method="POST" enctype="multipart/form-data">
@@ -47,7 +47,7 @@
             </tr>
             <tr>
                 <td><input name="submit" type="submit" value="save"></td>
-                <td><button type="button"  onclick="window.location.href='/'"">back</button>
+                <td><button type="button"  onclick="window.location.href='/'">back</button>
             </tr>
         </table>
     </form>

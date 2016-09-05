@@ -113,21 +113,24 @@ Route::group(['middleware' => 'auth'], function(){
     ]);
 
     Route::group(['middleware' => 'role:admin'],function(){
-        /*Route::get('/dashboard-admin', [
-
+        Route::get('/dashboard-admin', [
+            "uses" => "UserController@showAdminDashboard"
         ]);
 
+        Route::get('/dashboard-admin/systeminfo', [
+            "uses" => "UserController@showSystemInfo"
+        ]);
         Route::get('/dashboard-admin/users', [
-
+            "uses" => "UserController@showAdminUserList"
         ]);
 
         Route::delete('/dashboard-admin/users/{uid}', [
-
+            "uses" => "UserController@deleteUser"
         ]);
 
         Route::match(['GET', 'POST'], '/dashboard-admin/users/{uid}', [
-
-        ]);*/
+            "uses" => "UserController@setUser"
+        ]);
 
         Route::get('/dashboard-admin/category', [
             "uses" => "CategoryController@showAdminCategoryDashboard"
@@ -141,7 +144,7 @@ Route::group(['middleware' => 'auth'], function(){
             "uses" => "CategoryController@editCategory"
         ]);
 
-        Route::delete('/dashboard-admin/category/{cat_id}/delete', [
+        Route::get('/dashboard-admin/category/{cat_id}/delete', [
             "uses" => "CategoryController@deleteCategory"
         ]);
     });
@@ -182,12 +185,12 @@ Route::match(['GET', 'POST'], '/{username}/repository/{repo_name}/edit/{file_nam
     "middleware" => "auth"
 ]);
 
-/*
-Route::get('/{username}/category', [
 
+Route::get('/{username}/category', [
+    "uses" => "CategoryController@showCategoryListByUsername"
 ]);
 
 Route::get('/{username}/category/{cat_id}', [
-
-]);*/
+    "uses" => "CategoryController@showCategoryByCatIDByUsername"
+]);
 

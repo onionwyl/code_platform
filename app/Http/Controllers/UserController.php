@@ -15,6 +15,9 @@ use App\User;
 use App\UserInfo;
 use App\Repository;
 use App\Category;
+use App\Comment;
+use App\Code;
+use App\Submission;
 use App\PasswordReset;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -398,6 +401,90 @@ class UserController extends Controller
             }
         }
         return View::make('dashboard.account')->with($data);
+    }
+
+    public function showAdminDashboard(Request $request)
+    {
+        return View::make('admin.dashboard');
+    }
+
+    public function showSystemInfo(Request $request)
+    {
+        return View::make('systeminfo');
+    }
+
+    public function showAdminUserList(Request $request)
+    {
+        $data = [];
+        $userObj = User::where('gid','!=', '0')->get();
+        $data['users'] = $userObj;
+        return View::make('admin.userlist')->with($data);
+    }
+
+    public function setUser(Request $request, $uid)
+    {
+        $data = [];
+        $errMsg = new MessageBag;
+        $userObj = User::where('uid', $uid)->first();
+        $userInfoObj = UserInfo::where('uid', $uid)->first();
+        $data['user'] = $userObj;
+        $data['userinfo'] = $userInfoObj;
+        if($request->method() == "POST")
+        {
+            $this->validate($request, [
+                'email' => 'required|email|unique:users,email,'.$userObj->uid.',uid',
+                'nickname' => 'required|unique:userinfo,nickname,'.$userInfoObj->infoid.',infoid'
+            ]);
+            $input = $request->input();
+            $userInfoObj->nickname = $input['nickname'];
+            if(isset($input['realname']))
+                $userInfoObj->realname = $input['realname'];
+            if(isset($input['signature']))
+                $userInfoObj->signature = $input['signature'];
+            if(isset($input['introduction']))
+                $userInfoObj->introduction = $input['introduction'];
+            if(isset($input['email']))
+                $userObj->email = $input['email'];
+            if(isset($input['password']))
+                $userObj->password = Hash::make($input['password']);
+            $data['user'] = $userObj;
+            $data['userinfo'] = $userInfoObj;
+            $userObj->save();
+            $userInfoObj->save();
+            if($request->hasFile('avatar'))
+            {
+                $image = $request->file('avatar');
+                if($image->getClientSize() > 2097152)
+                {
+                    $errMsg->add('sizeErr', 'Image file is larger than 2M!');
+                }
+                elseif(substr($image->getMimeType(), 0, 6) != "image/")
+                {
+                    $errMsg->add('typeErr', 'Image file type error!');
+                }
+                else
+                {
+                    $image->move('./avatar/', "$uid.jpg");
+                }
+            }
+            return Redirect::to('/dashboard-admin/users/'.$uid)->withErrors($errMsg);
+        }
+        return View::make('admin.edituser')->with($data);
+    }
+
+    public function deleteUser(Request $request, $uid)
+    {
+        $userObj = User::where('uid', $uid)->first();
+        if($userObj != NULL)
+        {
+            Code::where('uid', $uid)->delete();
+            Repository::where('uid', $uid)->delete();
+            Comment::where('uid', $uid)->delete();
+            Submission::where('uid', $uid)->delete();
+            UserInfo::where('uid', $uid)->delete();
+            User::where('uid', $uid)->delete();
+        }
+        return Redirect::to('/dashboard-admin/users');
     }
 
 }

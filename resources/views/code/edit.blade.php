@@ -10,7 +10,7 @@
     @include("layout.header")
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
-            &nbsp;{{ $error }}
+            <div class="alert alert-danger"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{$error}}</div>
         @endforeach
     @endif
     <form action="/{{ $user->username }}/repository/{{ $repo->repo_name }}/edit/{{ $code->file_name }}" method="POST" role="form">

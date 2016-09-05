@@ -47,6 +47,46 @@ class CategoryController extends Controller
         return View::make('category.repo')->with($data);
     }
 
+    public function showCategoryListByUsername(REquest $request, $username)
+    {
+        $data = [];
+        $userObj = User::where('username', $username)->first();
+        if($userObj == NULL)
+        {
+            return Redirect::to('/');
+        }
+        $categoryObj = Category::all();
+        for($i = 0; $i < $categoryObj->count(); $i++)
+        {
+            $categoryObj[$i]->count = Repository::select('rid')->where(['catid' => $categoryObj[$i]->catid, 'uid' => $userObj->uid])->get()->count();
+        }
+        $data['cats'] = $categoryObj;
+        return View::make('category.userlist')->with($data);
+    }
+
+    public function showCategoryByCatIDByUsername(Request $request, $username, $cat_id)
+    {
+        $data = [];
+        $userObj = User::where('username', $username)->first();
+        if($userObj == NULL)
+        {
+            return Redirect::to('/');
+        }
+        $categoryObj = Category::where('catid', $cat_id)->first();
+        if($categoryObj == NULL)
+        {
+            return Redirect::to('/');
+        }
+        $repositoryObj = Repository::where(['catid' => $categoryObj->catid, 'uid' => $userObj->uid])->get();
+        for($i = 0; $i < $repositoryObj->count(); $i++)
+        {
+            $repositoryObj[$i]->username = $username;
+        }
+        $data['cat'] = $categoryObj;
+        $data['repos'] = $repositoryObj;
+        return View::make('category.userrepolist')->with($data);
+    }
+
     public function showAdminCategoryDashboard(Request $request)
     {
         $data = [];
@@ -98,7 +138,7 @@ class CategoryController extends Controller
         $categoryObj = Category::where('catid', $cat_id)->first();
         if($categoryObj == NULL)
             return Redirect::to ('/dashboard-admin/category');
-        Repository::where('cid', $cat_id)->update(['cid' => 0]);
+        Repository::where('catid', $cat_id)->update(['catid' => 0]);
         $categoryObj->delete();
         return Redirect::to('/dashboard-admin/category');
     }

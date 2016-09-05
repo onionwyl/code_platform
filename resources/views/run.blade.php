@@ -11,7 +11,7 @@
     <h2>Online Compiler</h2>
     @if(count($errors) > 0 )
         @foreach($errors->all() as $error)
-            &nbsp;{{ $error }}
+            <div class="alert alert-danger"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{$error}}</div>
         @endforeach
     @endif
     <form action="/run" method="POST">

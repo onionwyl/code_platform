@@ -7,7 +7,7 @@
 </head>
 <body>
     @include("layout.header")
-    <h3><span class="glyphicon glyphicon-book"></span> <a href="/{{ $user->username }}/repository/">{{ $user->username }}</a>/<a href="/{{ $user->username }}/repository/{{ $repo->repo_name }}">{{ $repo->repo_name }}</a></h3>
+    <h3><span class="glyphicon glyphicon-book"></span> <a href="/{{ $user->username }}/repository/">{{ $user->username }}</a>/<a href="/{{ $user->username }}/repository/{{ $repo->repo_name }}">{{ $repo->repo_name }}</a><a href="/comment/{{ $user->username }}/repository/{{ $repo->repo_name }}" class="btn btn-primary pull-right">Comment</a></h3>
     <hr/>
     <h4><div class="col-lg-10"><em>{{ $repo->repo_description }}</em></div>
     <div class="col-lg-2 text-right">@if($cat != NULL){{ $cat->catname }}@else unclassified @endif</div></h4>

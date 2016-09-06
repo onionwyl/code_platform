@@ -100,15 +100,19 @@ Route::group(['middleware' => 'auth'], function(){
         "uses" => "RepositoryController@addRepository"
     ]);
 
-    Route::post('/comments/add', [
+    Route::get('/comment/{username}/repository/{repo_name}', [
+        "uses" => "CommentController@showComment"
+    ]);
+
+    Route::post('/comment/add', [
         "uses" => "CommentController@addComment"
     ]);
 
-    Route::post('/comments/reply', [
+    Route::post('/comment/reply', [
         "uses" => "CommentController@replyComment"
     ]);
 
-    Route::delete('/comments/delete/{{comment_id}}', [
+    Route::delete('/comment/delete/{comment_id}', [
         "uses" => "CommentController@deleteComment"
     ]);
 

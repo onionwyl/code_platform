@@ -5,6 +5,8 @@
     <title>Compiler</title>
     @include("layout.head")
     @include("layout.codehead")
+    <link href="/css/prism.css" rel="stylesheet" />
+    <script src="/js/prism.js"></script>
 </head>
 <body>
     @include("layout.header")
@@ -25,8 +27,8 @@
         <h3>Input</h3>
         <textarea name="input" id="input" rows="5" cols="80">@if(old('input') == NULL){{ $input }}@else{{ old('input') }}@endif</textarea>
         <h3>Output</h3>
-        <textarea name="output" rows="5" cols="80" id="output">@if($err_info != "" && $run_status == 2){{ $err_info }}@else{{ $output }}@endif</textarea>
-        
+        <!--<textarea name="output" rows="5" cols="80" id="output">@if($err_info != "" && $run_status == 2){{ $err_info }}@else{{ $output }}@endif</textarea>-->
+        <pre class="line-numbers"><code id="output" name="output">@if($err_info != "" && $run_status == 2){{ $err_info }}@else{{ $output }}@endif</code></pre>
         
     </form>
 
@@ -72,12 +74,12 @@
           extraKeys: {"Ctrl-Space": "autocomplete"},
           theme: "panda-syntax"
         });
-        var editor2 = CodeMirror.fromTextArea(document.getElementById("output"), {
+        /*var editor2 = CodeMirror.fromTextArea(document.getElementById("output"), {
           lineNumbers: true,
           matchBrackets: true,
           extraKeys: {"Ctrl-Space": "autocomplete"},
           theme: "panda-syntax"
-        });
+        });*/
     </script>
     @include("layout.footer")
 </body>

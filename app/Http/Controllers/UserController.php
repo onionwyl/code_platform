@@ -83,7 +83,7 @@ class UserController extends Controller
                     {
                         $request->session()->put([
                         "gid" => $userObj->gid,
-                    ]);
+                        ]);
                     }
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
@@ -285,6 +285,12 @@ class UserController extends Controller
                 'lastlogin_ip' => $request->ip(),
                 'lastlogin_time' => date('Y-m-d H:i:s')
             ]);
+            if($userObj->gid == 0)
+            {
+                $request->session()->put([
+                "gid" => $userObj->gid,
+                ]);
+            }
             if($request->session()->get('lastUrl')!=NULL)
                 return Redirect::to($request->session()->get('lastUrl'));
             return Redirect::to("/");
@@ -364,6 +370,12 @@ class UserController extends Controller
                         "username" => $userObj->username,
                         "uid" => $userObj->uid
                     ]);
+                    if($userObj->gid == 0)
+                    {
+                        $request->session()->put([
+                        "gid" => $userObj->gid,
+                        ]);
+                    }
                     $request->session()->forget('userqq');
                     $userObj->where('uid', $userObj->uid)->update([
                         'lastlogin_ip' => $request->ip(),
